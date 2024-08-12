@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Speedometer</title>
+    <style>
+        /* Add your CSS styles here */
+        #speedometer {
+            width: 200px;
+            height: 200px;
+            border: 10px solid #ccc;
+            border-radius: 50%;
+            position: relative;
+            background: conic-gradient(#4caf50 0% 50%, #ddd 50% 100%);
+        }
+        #value {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 2em;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div id="speedometer">
+        <div id="value">0</div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js"></script>
+
+    <script>
+        // Add your Firebase configuration here
+		const firebaseConfig = {
+		  apiKey: "AIzaSyDnn3kkfrVD71xLl0lg-EFZepEdxHL8Aig",
+		  authDomain: "gsma7670c.firebaseapp.com",
+		  databaseURL: "https://gsma7670c-default-rtdb.asia-southeast1.firebasedatabase.app",
+		  projectId: "gsma7670c",
+		  storageBucket: "gsma7670c.appspot.com",
+		  messagingSenderId: "351373262732",
+		  appId: "1:351373262732:web:4b0917cb69679c1f1320a9",
+		  measurementId: "G-4JKM2ZENBM"
+		};
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        // Reference to your data
+        const speedometerRef = database.ref('sensor/speed');
+
+        // Update speedometer dynamically
+        speedometerRef.on('value', (snapshot) => {
+            const speed = snapshot.val();
+            document.getElementById('value').innerText = speed;
+            
+            // Update speedometer's visual representation
+            const percentage = (speed / 100) * 100; // Assuming max value is 100
+            document.getElementById('speedometer').style.background = `conic-gradient(#4caf50 0% ${percentage}%, #ddd ${percentage}% 100%)`;
+        });
+    </script>
+</body>
+</html>
